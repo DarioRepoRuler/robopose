@@ -24,3 +24,4 @@ deps/owi-description/
 deps/baxter-description/
 deps/kuka-description/
 deps/panda-description/
+deps/bullet3/

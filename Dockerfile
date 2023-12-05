@@ -61,9 +61,12 @@ ENV PATH="/opt/conda/bin:${PATH}"
 WORKDIR /app
 
 # Copy all files from the host into the container
-COPY ./local_data  /app/local_data
-COPY ./deps /app/deps
-COPY ./environment.yaml /app/
+# COPY ./local_data  /app/local_data
+# COPY ./deps /app/deps
+# COPY ./environment.yaml /app/
+# COPY ./notebooks /app/notebooks/
+# COPY 
+COPY . /app/
 
 # Create a Conda environment and activate it
 RUN /opt/conda/bin/conda env create -n robopose -f /app/environment.yaml \

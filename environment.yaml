@@ -22,6 +22,7 @@ dependencies:
   - ffmpeg
   - phantomjs
   - pip:
+      - setuptools==68.0.0
       - selenium
       - moviepy
       - omegaconf

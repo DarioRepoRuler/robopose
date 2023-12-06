@@ -191,6 +191,8 @@ def train_pose(args):
     # Make model
     logger.info(f"Make model")
     renderer = BulletBatchRenderer(object_set=args.urdf_ds_name, n_workers=args.n_rendering_workers)
+    
+    # This is where the urdf repo is set
     urdf_ds = make_urdf_dataset(args.urdf_ds_name)
     mesh_db = MeshDataBase.from_urdf_ds(urdf_ds).cuda().float()
     logger.info(f"Create model")

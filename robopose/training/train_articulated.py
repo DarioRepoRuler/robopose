@@ -159,7 +159,7 @@ def train_pose(args):
             for _ in range(n_repeat):
                 datasets.append(ds)
         return ConcatDataset(datasets)
-
+    logger.info(f"Make datasets train/val")
     scene_ds_train = make_datasets(args.train_ds_names)
     scene_ds_val = make_datasets(args.val_ds_names)
 
@@ -184,10 +184,11 @@ def train_pose(args):
     ds_iter_val = MultiEpochDataLoader(ds_iter_val)
 
     # Make model
+    logger.info(f"Make model")
     renderer = BulletBatchRenderer(object_set=args.urdf_ds_name, n_workers=args.n_rendering_workers)
     urdf_ds = make_urdf_dataset(args.urdf_ds_name)
     mesh_db = MeshDataBase.from_urdf_ds(urdf_ds).cuda().float()
-
+    logger.info(f"Create model")
     model = create_model(cfg=args, renderer=renderer, mesh_db=mesh_db).cuda()
 
     if args.run_id_pretrain is not None:
@@ -229,7 +230,8 @@ def train_pose(args):
         start_epoch = 0
     end_epoch = args.n_epochs
 
-    # Synchronize models across processes.
+    # Synchronize models across processes.#
+    logger.info(f"Synchronize the model")
     model = sync_model(model)
     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[device], output_device=device)
 
@@ -237,6 +239,7 @@ def train_pose(args):
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
     # Warmup
+    logger.info(f"Begin with warmup!")
     def get_lr_ratio(batch):
         n_batch_per_epoch = args.epoch_size // args.batch_size
         epoch_id = batch // n_batch_per_epoch
@@ -257,8 +260,10 @@ def train_pose(args):
     optimizer._step_count = 1
     lr_scheduler.step()
     optimizer._step_count = 0
-
+    
+    logger.info(f"Start with training.....")
     for epoch in range(start_epoch, end_epoch + 1):
+        
         meters_train = defaultdict(lambda: AverageValueMeter())
         meters_val = defaultdict(lambda: AverageValueMeter())
         meters_time = defaultdict(lambda: AverageValueMeter())
@@ -268,7 +273,8 @@ def train_pose(args):
         else:
             n_iterations = min(epoch // args.add_iteration_epoch_interval + 1, args.n_iterations)
         h = functools.partial(h_pose, model=model, cfg=args, n_iterations=n_iterations, mesh_db=mesh_db)
-
+        
+        # Definition of train epoch!
         def train_epoch():
             model.train()
             iterator = tqdm(ds_iter_train, ncols=80)
@@ -310,7 +316,7 @@ def train_pose(args):
         def test():
             model.eval()
             return run_test(args, epoch=epoch)
-
+        logger.info(f"Epoch: {epoch}")
         train_epoch()
 
         if epoch % args.val_epoch_interval == 0:

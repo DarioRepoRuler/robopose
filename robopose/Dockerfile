@@ -1,7 +1,7 @@
 # PROJECT DOCKER CONTAINER
 
 # Use an official Ubuntu as a parent image
-FROM cuda_base_v2:latest
+FROM cuda_base_v3:latest
 
 # Set environment variables for NVIDIA runtime
 ENV NVIDIA_VISIBLE_DEVICES all
@@ -45,6 +45,7 @@ RUN echo ""deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/source
 RUN echo "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654" >> /root/.bashrc
 RUN echo "apt-get update" >> /root/.bashrc
 RUN echo "sudo apt-get install -y liburdfdom-dev" >> /root/.bashrc
+RUN mkdir /app/jobs
 
 RUN rm -rf /app/robopose
 

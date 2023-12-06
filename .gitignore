@@ -6,3 +6,4 @@ dist/
 robopose.egg-info/
 __pycache__
 rclone.conf
+local_data

@@ -1,4 +1,8 @@
 robopose/id_rsa
 robopose/id_rsa.pub
-
-
+build/*
+deps/kuka-description/
+dist/
+robopose.egg-info/
+__pycache__
+rclone.conf

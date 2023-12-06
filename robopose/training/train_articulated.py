@@ -122,14 +122,17 @@ def run_test(args, epoch):
 
 
 def train_pose(args):
+    
     torch.set_num_threads(1)
 
+    # This just starts from a saved model
     if args.resume_run_id:
         resume_dir = EXP_DIR / args.resume_run_id
         resume_args = yaml.load((resume_dir / 'config.yaml').read_text())
         keep_fields = set(['resume', 'resume_path', 'epoch_size', 'resume_run_id'])
         vars(args).update({k: v for k, v in vars(resume_args).items() if k not in keep_fields})
 
+    # Update the args and set some additional parameters
     args.save_dir = EXP_DIR / args.run_id
     args = check_update_config(args)
 
@@ -159,6 +162,8 @@ def train_pose(args):
             for _ in range(n_repeat):
                 datasets.append(ds)
         return ConcatDataset(datasets)
+    
+    
     logger.info(f"Make datasets train/val")
     scene_ds_train = make_datasets(args.train_ds_names)
     scene_ds_val = make_datasets(args.val_ds_names)
@@ -256,7 +261,7 @@ def train_pose(args):
     lr_scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, get_lr_ratio)
     lr_scheduler.last_epoch = start_epoch * args.epoch_size // args.batch_size - 1
 
-    # Just remove the annoying warning
+    # Just remove the annoying warning 
     optimizer._step_count = 1
     lr_scheduler.step()
     optimizer._step_count = 0
@@ -277,15 +282,19 @@ def train_pose(args):
         # Definition of train epoch!
         def train_epoch():
             model.train()
+            
             iterator = tqdm(ds_iter_train, ncols=80)
+            
             t = time.time()
             for n, sample in enumerate(iterator):
+                #logger.info(f"{'-'*80}")
                 if n > 0:
                     meters_time['data'].add(time.time() - t)
-
+                
                 optimizer.zero_grad()
-
+                
                 t = time.time()
+                
                 loss = h(data=sample, meters=meters_train, train=True)
                 meters_time['forward'].add(time.time() - t)
                 iterator.set_postfix(loss=loss.item())
@@ -316,6 +325,8 @@ def train_pose(args):
         def test():
             model.eval()
             return run_test(args, epoch=epoch)
+        
+        
         logger.info(f"Epoch: {epoch}")
         train_epoch()
 

@@ -12,12 +12,14 @@ def make_cfg(args):
     cfg = argparse.ArgumentParser('').parse_args([])
     if args.config:
         logger.info(f"{Fore.GREEN}Training with config: {args.config} {Style.RESET_ALL}")
-
+    
+    # Add cfg component at which state we want to resum our training
     cfg.resume_run_id = None
     if len(args.resume) > 0:
         cfg.resume_run_id = args.resume
         logger.info(f"{Fore.RED}Resuming {cfg.resume_run_id} {Style.RESET_ALL}")
 
+    # This parameters are all set by default
     N_CPUS = int(os.environ.get('N_CPUS', 10))
     N_WORKERS = min(N_CPUS - 2, 8)
     N_RAND = np.random.randint(1e6)
@@ -26,7 +28,6 @@ def make_cfg(args):
 
     # Data
     cfg.urdf_ds_name = ''
-
     cfg.train_ds_names = []
     cfg.val_ds_names = cfg.train_ds_names
     cfg.val_epoch_interval = 10
@@ -79,12 +80,14 @@ def make_cfg(args):
     cfg.test_epoch_interval = 100
     cfg.test_only_last_epoch = False
 
+
+    # These config just set the 6 parameters according to whether the joints should be predicted or not
     def gt_joints_cfg():
+        cfg.center_crop_on = 'centroid'
+        cfg.reference_point = 'centroid'
         cfg.predict_joints = False
         cfg.possible_anchor_links = 'base_only'
         cfg.points_for_pose_loss = 'whole_robot'
-        cfg.center_crop_on = 'centroid'
-        cfg.reference_point = 'centroid'
 
     def predict_joints_cfg():
         cfg.center_crop_on = 'centroid'
@@ -93,7 +96,8 @@ def make_cfg(args):
         cfg.possible_anchor_links = 'top_5_largest'
         cfg.points_for_pose_loss = 'anchor_link'
         cfg.joints_std_interval_ratio = 0.05
-
+    
+    # set the ds names accoring to dataset name and call the above defined functions
     if 'dream-panda' in args.config:
         cfg.urdf_ds_name = 'panda'
         cfg.train_ds_names = [('dream.panda.synt.dr.train', 1)]
@@ -191,8 +195,12 @@ def make_cfg(args):
 
     elif 'dream-kuka' in args.config:
         cfg.urdf_ds_name = 'iiwa7'
-        cfg.train_ds_names = [('dream.kuka.synt.dr.train', 1)]
-        cfg.val_ds_names = [('dream.kuka.synt.dr.train', 1)]
+        #cfg.train_ds_names = [('dream.kuka.synt.dr.train', 1)]
+        #cfg.val_ds_names = [('dream.kuka.synt.dr.train', 1)]
+        
+        # This is just a hack
+        cfg.train_ds_names = [('dream.kuka.synt.photo.test', 1)]
+        cfg.val_ds_names = [('dream.kuka.synt.photo.test', 1)]
 
         if 'dream-kuka-gt_joints' == args.config:
             gt_joints_cfg()
@@ -200,8 +208,9 @@ def make_cfg(args):
             predict_joints_cfg()
         else:
             raise ValueError(args.config)
-
-
+        
+    # This is where I should add my cfg setup-----------------------------------------##
+    #---------------------------------------------------------------------------------##
     elif args.resume:
         pass
 
@@ -210,6 +219,7 @@ def make_cfg(args):
 
     cfg.run_id = f'{args.config}-{run_comment}-{N_RAND}'
 
+    # If debug is enabled set this parameters
     if args.debug:
         cfg.n_epochs = 6
         cfg.val_epoch_interval = 1
@@ -233,6 +243,7 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('--resume', default='', type=str)
     args = parser.parse_args()
-
+    # Build cfg variable so train can be set accordingly
     cfg = make_cfg(args)
+    # Train now
     train_pose(cfg)

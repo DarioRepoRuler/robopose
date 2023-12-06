@@ -11,12 +11,16 @@ from pathlib import Path
 
 from robopose.config import MEMORY
 from robopose.lib3d import Transform
+# Added for debugging purposes
+from robopose.utils.logging import get_logger
+logger = get_logger(__name__)
 
 
 KUKA_SYNT_TRAIN_DR_INCORRECT_IDS = {83114, 28630, }
 @MEMORY.cache
 def build_frame_index(base_dir):
     im_paths = base_dir.glob('*.jpg')
+    logger.info(f"Image Paths: {im_paths}")
     infos = defaultdict(list)
     for n, im_path in tqdm(enumerate(sorted(im_paths))):
         view_id = int(im_path.with_suffix('').with_suffix('').name)
@@ -34,6 +38,7 @@ def build_frame_index(base_dir):
 
 class DreamDataset:
     def __init__(self, base_dir, image_bbox=False):
+        logger.info(f"Building Dream Dataset")
         self.base_dir = Path(base_dir)
         self.frame_index = build_frame_index(self.base_dir)
 
@@ -63,6 +68,9 @@ class DreamDataset:
                 'iiwa7_link_6', 'iiwa7_link_7',
             ]
             self.label = 'iiwa7'
+        # This will need another robot ---------------------------------##
+        
+        ##--------------------------------------------------------------##
         else:
             raise NotImplementedError
 

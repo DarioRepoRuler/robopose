@@ -20,6 +20,9 @@ def _make_craves_dataset(split):
 
 def make_scene_dataset(ds_name, n_frames=None):
     # CRAVES
+    
+    logger.info(f"DREAM DS DIR: {DREAM_DS_DIR}")
+    
     if ds_name == 'craves.synt.train':
         split = 'synt_train'
         ds = _make_craves_dataset(split)
@@ -60,6 +63,7 @@ def make_scene_dataset(ds_name, n_frames=None):
         ds = DreamDataset(DREAM_DS_DIR / 'synthetic/baxter_synth_test_dr')
 
     # Kuka
+    # in my test we will get in here!!!
     elif ds_name == 'dream.kuka.synt.dr.train':
         ds = DreamDataset(DREAM_DS_DIR / 'synthetic/kuka_synth_train_dr')
     elif ds_name == 'dream.kuka.synt.dr.test':

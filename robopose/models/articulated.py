@@ -238,6 +238,8 @@ class ArticulatedObjectRefiner(nn.Module):
                 anchor_link_name = np_random.choice(self.possible_anchor_link_names)
                 anchor_link_names.append(anchor_link_name)
 
+            #logger.info(f"{'-'*80}")
+            #logger.info("In forward: start render")
             # Compute inputs
             if self.input_anchor_mask:
                 renders_rgb, renders_mask_int = self.renderer.render(

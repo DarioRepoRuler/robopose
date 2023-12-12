@@ -29,7 +29,7 @@ def to_torch_uint8(im):
         assert im.dtype == torch.uint8
     elif isinstance(im, np.ndarray):
         assert im.dtype == np.uint8
-        im = torch.as_tensor(im)
+        im = torch.as_tensor(im.copy())
     else:
         raise ValueError('Type not supported', type(im))
     if im.dim() == 3:

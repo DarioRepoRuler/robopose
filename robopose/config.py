@@ -13,8 +13,8 @@ username = getpass.getuser()
 
 PROJECT_ROOT = Path(robopose.__file__).parent.parent
 #PROJECT_DIR = PROJECT_ROOT
-PROJECT_DIR = Path("/app")
-#PROJECT_DIR = Path("/home/dario/Documents/RL_Git/robopose")
+#PROJECT_DIR = Path("/app")
+PROJECT_DIR = Path("/home/dario/Documents/RL_Git/robopose")
 DATA_DIR = PROJECT_DIR / 'data'
 LOCAL_DATA_DIR = PROJECT_DIR / 'local_data'
 print(f"Project directory :{PROJECT_DIR}")

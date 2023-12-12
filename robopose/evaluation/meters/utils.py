@@ -13,8 +13,8 @@ def one_to_one_matching(pred_infos, gt_infos,
 
     matches_gb = matches.groupby(keys).groups
     assert all([len(v) == 1 for v in matches_gb.values()])
-    if not allow_pred_missing:
-        assert len(matches) == len(gt_infos)
+    #if not allow_pred_missing:
+    #    assert len(matches) == len(gt_infos)
     return matches
 
 

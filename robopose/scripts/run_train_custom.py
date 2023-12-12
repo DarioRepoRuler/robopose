@@ -210,6 +210,16 @@ def make_cfg(args):
             raise ValueError(args.config)
         
     # This is where I should add my cfg setup-----------------------------------------##
+    elif 'custom-abb' in args.config:
+        cfg.urdf_ds_name = 'irb120'
+        # Names must still be adjusted!
+        cfg.train_ds_names = [('dream.abb.synt.photo.test', 1)]
+        cfg.val_ds_names = [('dream.abb.synt.photo.test', 1)]
+        if 'custom-abb-gt_joints' == args.config:
+            gt_joints_cfg()
+        elif 'custom-abb-predict_joints' == args.config:
+            predict_joints_cfg()
+    
     #---------------------------------------------------------------------------------##
     elif args.resume:
         pass

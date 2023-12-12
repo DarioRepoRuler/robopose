@@ -19,16 +19,19 @@ logger = get_logger(__name__)
 KUKA_SYNT_TRAIN_DR_INCORRECT_IDS = {83114, 28630, }
 @MEMORY.cache
 def build_frame_index(base_dir):
+    #logger.info(f"Base dir: {base_dir}")
     im_paths = base_dir.glob('*.jpg')
-    logger.info(f"Image Paths: {im_paths}")
+    
     infos = defaultdict(list)
     for n, im_path in tqdm(enumerate(sorted(im_paths))):
+        #logger.info(f"Image Paths: {im_path}")
         view_id = int(im_path.with_suffix('').with_suffix('').name)
         if 'kuka_synth_train_dr' in str(base_dir) and int(view_id) in KUKA_SYNT_TRAIN_DR_INCORRECT_IDS:
             pass
         else:
             scene_id = view_id
             infos['rgb_path'].append(im_path.as_posix())
+            #logger.info(f"Scene id: {scene_id}")
             infos['scene_id'].append(scene_id)
             infos['view_id'].append(view_id)
 
@@ -38,10 +41,10 @@ def build_frame_index(base_dir):
 
 class DreamDataset:
     def __init__(self, base_dir, image_bbox=False):
-        logger.info(f"Building Dream Dataset")
+        #logger.info(f"Building Dream Dataset")
         self.base_dir = Path(base_dir)
         self.frame_index = build_frame_index(self.base_dir)
-
+        #print(f"Frame index {self.frame_index}")
         self.joint_map = dict()
         if 'panda' in str(base_dir):
             self.keypoint_names = [
@@ -69,6 +72,13 @@ class DreamDataset:
             ]
             self.label = 'iiwa7'
         # This will need another robot ---------------------------------##
+        elif 'abb' in str(base_dir):
+            self.keypoint_names =[
+                'link_1', 'link_2', 'link_3',
+                'link_3', 'link_4', 'link_5',
+                'link_6',
+            ]
+            self.label = 'irb120'
         
         ##--------------------------------------------------------------##
         else:

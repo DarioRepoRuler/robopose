@@ -9,10 +9,14 @@ from robopose.simulator.caching import BodyCache
 from robopose.simulator.camera import Camera
 
 
+from robopose.utils.logging import get_logger
+logger = get_logger(__name__)
+
+
 class BulletSceneRenderer(BaseScene):
     def __init__(self,
                  urdf_ds='ycbv',
-                 preload_cache=False,
+                 flogeload_cache=False,
                  background_color=(0, 0, 0),
                  gpu_renderer=True,
                  gui=False):
@@ -25,6 +29,7 @@ class BulletSceneRenderer(BaseScene):
         self.background_color = background_color
 
     def setup_scene(self, obj_infos):
+        #logger.info(f"Object infos: {obj_infos}")
         labels = [obj['name'] for obj in obj_infos]
         bodies = self.body_cache.get_bodies_by_labels(labels)
         for (obj_info, body) in zip(obj_infos, bodies):

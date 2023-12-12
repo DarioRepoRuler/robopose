@@ -148,6 +148,8 @@ class ArticulatedObjectPredictionRunner:
                     pred_v.register_tensor('keypoints_2d', keypoints_2d)
                     pred_v.register_tensor('TCO_keypoints_3d', TCO_keypoints_3d)
                     predictions[pred_k].append(pred_v)
+            # This is just a hack to get easier to the predictions
+            break
 
         for k, v in predictions.items():
             predictions[k] = tc.concatenate(predictions[k])

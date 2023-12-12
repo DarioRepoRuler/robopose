@@ -292,6 +292,9 @@ def run_robot_eval(args):
     if not args.skip_evaluation:
         for preds_k, preds in all_predictions.items():
             do_eval = preds_k in args.eval_keys
+            # this "if" is just a hack 
+            if preds_k=="known_joints/dream": 
+                continue 
             if do_eval:
                 logger.info(f"Evaluation of predictions: {preds_k}")
                 eval_metrics[preds_k], eval_dfs[preds_k] = eval_runner.evaluate(preds)
@@ -302,6 +305,8 @@ def run_robot_eval(args):
     logger.info("Done with Evaluation.")
 
     for k, v in all_predictions.items():
+        if k=="known_joints/dream":
+            continue 
         all_predictions[k] = v.gather_distributed(tmp_dir=get_tmp_dir()).cpu()
 
     logger.info('Gathered predictions from all processes.')

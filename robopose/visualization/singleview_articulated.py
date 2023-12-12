@@ -7,6 +7,10 @@ from .plotter import Plotter
 from robopose.datasets.wrappers.augmentation_wrapper import AugmentationWrapper
 from robopose.datasets.augmentations import CropResizeToAspectAugmentation
 
+from robopose.utils.logging import get_logger
+logger = get_logger(__name__)
+
+
 
 def render_prediction_wrt_camera(renderer, pred, camera=None, resolution=(640, 480), K=None):
     assert len(pred) == 1
@@ -14,8 +18,10 @@ def render_prediction_wrt_camera(renderer, pred, camera=None, resolution=(640, 4
 
     if camera is not None:
         camera = deepcopy(camera)
+        #logger.info("Camera is not none")
     else:
         K = pred.K[0].numpy()
+        #logger.info(f"Okay {K}")
         camera = dict(
             K=K,
             resolution=resolution
@@ -34,6 +40,9 @@ def render_prediction_wrt_camera(renderer, pred, camera=None, resolution=(640, 4
             joints=joints,
         )
         list_objects.append(obj)
+        
+    # This is where it will throw erorrs:
+    #logger.info(f"List objects: {list_objects}, Camera: {camera}")
     renders = renderer.render_scene(list_objects, [camera])[0]['rgb']
 
     # renders = renderer.render_scene(list_objects, [camera])[0]['mask_int']

@@ -7,3 +7,7 @@
 [submodule "deps/urdfpytorch"]
 	path = deps/urdfpytorch
 	url = https://github.com/ylabbe/robopose_urdfpytorch
+[submodule "deps/abb_description"]
+	path = deps/abb_description
+	url = git@github.com:cwru-robotics/cwru-ros-pkg.git
+	branch = master

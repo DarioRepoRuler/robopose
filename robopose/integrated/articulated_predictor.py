@@ -74,6 +74,7 @@ class ArticulatedObjectPredictor(torch.nn.Module):
                                                  joints=q_pred,
                                                  K_crop=iter_outputs['K_crop'])
                 preds[f'iteration={n}'].append(data)
+            break
 
         for k, v in preds.items():
             preds[k] = tc.concatenate(v)

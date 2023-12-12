@@ -21,7 +21,7 @@ def _make_craves_dataset(split):
 def make_scene_dataset(ds_name, n_frames=None):
     # CRAVES
     
-    logger.info(f"DREAM DS DIR: {DREAM_DS_DIR}")
+    #logger.info(f"DREAM DS DIR: {DREAM_DS_DIR}")
     
     if ds_name == 'craves.synt.train':
         split = 'synt_train'
@@ -71,6 +71,16 @@ def make_scene_dataset(ds_name, n_frames=None):
     elif ds_name == 'dream.kuka.synt.photo.test':
         ds = DreamDataset(DREAM_DS_DIR / 'synthetic/kuka_synth_test_photo')
 
+    # need another dataset ------------------------------
+    # CUSTOM: ABB IRB120
+    elif ds_name =='dream.abb.synt.dr.train':
+        ds = DreamDataset(DREAM_DS_DIR / 'synthetic/abb_synth_train_dr')
+    elif ds_name =='dream.abb.synt.dr.test':
+        ds = DreamDataset(DREAM_DS_DIR / 'synthetic/abb_synth_test_dr')
+    
+    
+    # ---------------------------------------------------
+
     else:
         raise ValueError(ds_name)
 
@@ -99,6 +109,10 @@ def make_urdf_dataset(ds_name):
     # KUKA
     elif ds_name == 'iiwa7':
         ds = OneUrdfDataset(PROJECT_DIR / 'deps/kuka-description/iiwa_description/urdf/iiwa7.urdf', label='iiwa7')
+    # CUSTOM: ABB IRB 120
+    elif ds_name == 'irb120':
+        ds = OneUrdfDataset(PROJECT_DIR / 'deps/abb_description/catkin/src/cwru_376_student/abby_arm_simu/abb_common/urdf/irb120.urdf', label='irb120')
     else:
         raise ValueError(ds_name)
+    
     return ds

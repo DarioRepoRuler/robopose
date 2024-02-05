@@ -24,8 +24,8 @@ class BulletSceneRenderer(BaseScene):
         self.urdf_ds = make_urdf_dataset(urdf_ds)
         self.connect(gpu_renderer=gpu_renderer, gui=gui)
         self.body_cache = BodyCache(self.urdf_ds, self.client_id)
-        if preload_cache:
-            self.body_cache.get_bodies_by_ids(np.arange(len(self.urdf_ds)))
+        #if preload_cache:
+        #    self.body_cache.get_bodies_by_ids(np.arange(len(self.urdf_ds)))
         self.background_color = background_color
 
     def setup_scene(self, obj_infos):

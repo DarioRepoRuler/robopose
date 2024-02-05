@@ -8,7 +8,7 @@ from .bullet_scene_renderer import BulletSceneRenderer
 
 def init_renderer(urdf_ds, preload=True):
     renderer = BulletSceneRenderer(urdf_ds=urdf_ds,
-                                   preload_cache=preload,
+                                   #preload_cache=preload,
                                    background_color=(0, 0, 0))
     return renderer
 

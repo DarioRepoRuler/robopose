@@ -25,6 +25,12 @@ CVPR: Conference on Computer Vision and Pattern Recognition, 2021 (Oral)
 **RoboPose.** (a) Given a single RGB image of a known articulated robot in an unknown configuration (left), RoboPose estimates the joint   angles and the 6D camera-to-robot pose (rigid translation and rotation) providing the complete state of the robot within the 3D scene, here illustrated by overlaying the articulated CAD model of the robot over the input image (right). (b) When the joint angles are known at test-time (e.g. from internal measurements of the robot), RoboPose can use them as an additional input to estimate the 6D camera-to-robot pose to enable, for example, visually guided manipulation without fiducial markers.
 
 
+# Setup 
+For this project `Ubuntu 22.04.3 LTS` was used together with CPU:`AMD® Ryzen 9 3900x ` and  GPU:`Nvidia GeForce RTX 3070`. The project was coded in `VSCode 1.85`(this is important for the devcontainer). The host machine allready had the nvidia driver `525.147.05` installed. This is important because the docker based approach relies on it.
+
+
+
+
 # Citation
 If you use this code in your research, please cite the paper:
 
@@ -270,3 +276,8 @@ runjob --ngpus=44  python scripts/run_articulated_training.py --config=dream-kuk
 
 runjob --ngpus=44  python scripts/run_articulated_training.py --config=craves-owi535-predict_joints
 ```
+
+# Unreal Engine
+- [Unreal Engine Quickstart](https://docs.unrealengine.com/5.3/en-US/linux-development-quickstart-for-unreal-engine/)
+- [Download Unreal Engine](https://docs.unrealengine.com/5.3/en-US/downloading-unreal-engine-source-code/)
+- [Building Unreal Engine](https://docs.unrealengine.com/5.3/en-US/building-unreal-engine-from-source/)

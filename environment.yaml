@@ -22,12 +22,12 @@ dependencies:
   - ffmpeg
   - phantomjs
   - pip:
+      - comm==0.1.4
       - setuptools==68.0.0
-      - selenium
-      - moviepy
-      - omegaconf
-      - pytube
-      - line_profiler
+      - selenium==3.141.0
+      - moviepy==1.0.3
+      - omegaconf==2.1.1
+      - pytube==10.5.3
       - msgpack==0.6.2
       - imageio==2.6.1
       - simplejson==3.17.0

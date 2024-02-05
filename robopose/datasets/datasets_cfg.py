@@ -77,8 +77,6 @@ def make_scene_dataset(ds_name, n_frames=None):
         ds = DreamDataset(DREAM_DS_DIR / 'synthetic/abb_synth_train_dr')
     elif ds_name =='dream.abb.synt.dr.test':
         ds = DreamDataset(DREAM_DS_DIR / 'synthetic/abb_synth_test_dr')
-    
-    
     # ---------------------------------------------------
 
     else:
@@ -114,5 +112,4 @@ def make_urdf_dataset(ds_name):
         ds = OneUrdfDataset(PROJECT_DIR / 'deps/abb_description/catkin/src/cwru_376_student/abby_arm_simu/abb_common/urdf/irb120.urdf', label='irb120')
     else:
         raise ValueError(ds_name)
-    
     return ds

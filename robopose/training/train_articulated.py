@@ -279,6 +279,7 @@ def train_pose(args):
             n_iterations = args.n_iterations
         else:
             n_iterations = min(epoch // args.add_iteration_epoch_interval + 1, args.n_iterations)
+        # Define a partial function 'h' that calls the 'h_pose' function with predefined arguments like model, cfg, n_iterations, and mesh_db and so on
         h = functools.partial(h_pose, model=model, cfg=args, n_iterations=n_iterations, mesh_db=mesh_db)
         
         # Definition of train epoch!

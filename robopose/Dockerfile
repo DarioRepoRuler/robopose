@@ -1,7 +1,7 @@
 # PROJECT DOCKER CONTAINER
 
 # Use an official Ubuntu as a parent image
-FROM cuda_base_v3:latest
+FROM cuda_image:latest
 
 # Set environment variables for NVIDIA runtime
 ENV NVIDIA_VISIBLE_DEVICES all
@@ -47,7 +47,7 @@ RUN echo "apt-get update" >> /root/.bashrc
 RUN echo "sudo apt-get install -y liburdfdom-dev" >> /root/.bashrc
 RUN mkdir /app/jobs
 
-RUN rm -rf /app/robopose
+#RUN rm -rf /app/robopose
 
 # Command to run when the container starts
 CMD ["bash"]

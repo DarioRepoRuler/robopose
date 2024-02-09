@@ -26,9 +26,7 @@ CVPR: Conference on Computer Vision and Pattern Recognition, 2021 (Oral)
 
 
 # Setup 
-For this project `Ubuntu 22.04.3 LTS` was used together with CPU:`AMD® Ryzen 9 3900x ` and  GPU:`Nvidia GeForce RTX 3070`. The project was coded in `VSCode 1.85`(this is important for the devcontainer). The host machine allready had the nvidia driver `525.147.05` installed. This is important because the docker based approach relies on it.
-
-
+For this project `Ubuntu 22.04.3 LTS` was used together with CPU:`AMD® Ryzen 9 3900x ` and  GPU:`Nvidia GeForce RTX 3070`. The project was coded in `VSCode 1.85`(this is important for the devcontainer). The host machine already had the nvidia driver `525.147.05` installed.
 
 
 # Citation
@@ -53,11 +51,12 @@ year={2021}}
   - [Training models](#training-models)
 
 # Overview
-This repository contains the code for the full RoboPose approach and for reproducing all the results from the paper (training, inference and evaluation). 
+This repository contains the code from the original [robopose repository](https://github.com/ylabbe/robopose) and extends its support be introducing a docker structure which runs most of the code. 
+The docker container runs robopose using an `ubuntu 18.04` subsystem which also automatically installs all the necessary drivers, the cuda toolkit. It is even possible to code in real time wihtin docker using VS Codes DevContainer utilities.
 
 ![overview](images/method_overview.png)
 
-# Installation
+# Installation and Docker Setup
 ```
 git clone --recurse-submodules https://github.com/ylabbe/robopose.git
 cd robopose
@@ -66,6 +65,37 @@ conda activate robopose
 python setup.py install
 mkdir local_data
 ```
+Within the robopose environment you must now download the datasets or the pretrained models if you want to, this data will then be copied into the docker container. This is done because the download scripts won't execute that well within the docker container.
+
+
+## Docker Setup
+
+Now the first docker image must be created
+```
+docker build -t cuda_image . 
+```
+
+This will take some time, since the datasets, the pretrained models will be copied into the container, several packages are installed and another robopose env is created within the container.
+You can check if the image is created correctly using `docker images`.
+
+Now run
+```
+cd robopose
+docker build -t robopose_img . 
+```
+This will build a docker image on top of the other docker image. It is done because a developer will most likely change the code section of this projcet and this structure makes sure that the whole image is created from scratch. If something is changes within the code section and you want it to be in the container when you first open it you can delete the image and rebuild it.
+
+Finally to develop within the container run:
+```
+sudo docker run --shm-size=60g --rm --runtime=nvidia --gpus all -it robopose_img:latest
+```
+
+If there is something changed within the docker container and you want to execute a job via the job runner, reset the `job_runner` file and execute the `setup.py`
+```
+runjob-config job-runner-config.yaml 
+python setup.py install 
+```
+
 The installation may take some time as several packages must be downloaded and installed/compiled. If you plan to change the code, run `python setup.py develop`.
 
 # Downloading and preparing data
@@ -276,8 +306,3 @@ runjob --ngpus=44  python scripts/run_articulated_training.py --config=dream-kuk
 
 runjob --ngpus=44  python scripts/run_articulated_training.py --config=craves-owi535-predict_joints
 ```
-
-# Unreal Engine
-- [Unreal Engine Quickstart](https://docs.unrealengine.com/5.3/en-US/linux-development-quickstart-for-unreal-engine/)
-- [Download Unreal Engine](https://docs.unrealengine.com/5.3/en-US/downloading-unreal-engine-source-code/)
-- [Building Unreal Engine](https://docs.unrealengine.com/5.3/en-US/building-unreal-engine-from-source/)

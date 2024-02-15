@@ -24,37 +24,17 @@ CVPR: Conference on Computer Vision and Pattern Recognition, 2021 (Oral)
 ![overview](images/teaser.png)
 **RoboPose.** (a) Given a single RGB image of a known articulated robot in an unknown configuration (left), RoboPose estimates the joint   angles and the 6D camera-to-robot pose (rigid translation and rotation) providing the complete state of the robot within the 3D scene, here illustrated by overlaying the articulated CAD model of the robot over the input image (right). (b) When the joint angles are known at test-time (e.g. from internal measurements of the robot), RoboPose can use them as an additional input to estimate the 6D camera-to-robot pose to enable, for example, visually guided manipulation without fiducial markers.
 
-
-# Setup 
-For this project `Ubuntu 22.04.3 LTS` was used together with CPU:`AMD® Ryzen 9 3900x ` and  GPU:`Nvidia GeForce RTX 3070`. The project was coded in `VSCode 1.85`(this is important for the devcontainer). The host machine already had the nvidia driver `525.147.05` installed.
-
-
-# Citation
-If you use this code in your research, please cite the paper:
-
-```
-@inproceedings{labbe2021robopose,
-title= {Single-view robot pose and joint angle estimation via render & compare}
-author={Y. {Labb\'e} and J. {Carpentier} and M. {Aubry} and J. {Sivic}},
-booktitle={Proceedings of the Conference on Computer Vision and Pattern Recognition (CVPR)},
-year={2021}}
-```
-
-# Table of content
-- [Overview](#overview)
-- [Installation](#installation)
-- [Downloading and preparing data](#downloading-and-preparing-data)
-- [Note on GPU parallelization](#note-on-gpu-parallelization)
-- [Reproducing results](#reproducing-results)
-  - [Quantitative and qualitative evaluation](#quantitative-and-qualitative-evaluation)
-  - [Running inference](#running-inference)
-  - [Training models](#training-models)
-
 # Overview
-This repository contains the code from the original [robopose repository](https://github.com/ylabbe/robopose) and extends its support be introducing a docker structure which runs most of the code. 
+This repository forked from the original [robopose repository](https://github.com/ylabbe/robopose) and extends its support be introducing a docker structure which runs most of the code. 
 The docker container runs robopose using an `ubuntu 18.04` subsystem which also automatically installs all the necessary drivers, the cuda toolkit. It is even possible to code in real time wihtin docker using VS Codes DevContainer utilities.
 
 ![overview](images/method_overview.png)
+
+ 
+![](images/output.gif)
+# Setup 
+For this project `Ubuntu 22.04.3 LTS` was used together with CPU:`AMD® Ryzen 9 3900x ` and  GPU:`Nvidia GeForce RTX 3070`. The project was coded in `VSCode 1.85`(this is important for the devcontainer). The host machine already had the nvidia driver `525.147.05` installed.
+
 
 # Installation and Docker Setup
 ```
@@ -67,6 +47,7 @@ mkdir local_data
 ```
 Within the robopose environment you must now download the datasets or the pretrained models if you want to, this data will then be copied into the docker container. This is done because the download scripts won't execute that well within the docker container.
 
+![](images/docker_architecture.png)
 
 ## Docker Setup
 
@@ -305,4 +286,15 @@ runjob --ngpus=44  python scripts/run_articulated_training.py --config=dream-kuk
 runjob --ngpus=44  python scripts/run_articulated_training.py --config=dream-kuka-predict_joints
 
 runjob --ngpus=44  python scripts/run_articulated_training.py --config=craves-owi535-predict_joints
+```
+
+# Citation
+If you use this code in your research, please cite the paper:
+
+```
+@inproceedings{labbe2021robopose,
+title= {Single-view robot pose and joint angle estimation via render & compare}
+author={Y. {Labb\'e} and J. {Carpentier} and M. {Aubry} and J. {Sivic}},
+booktitle={Proceedings of the Conference on Computer Vision and Pattern Recognition (CVPR)},
+year={2021}}
 ```
